@@ -1,0 +1,1116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A³pa · Ingressos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF2FA; --card:#FFFFFF; --ink:#0A1B3A; --mute:#566684; --line:#D3DCEC;
+  --head:#0B3C8C; --head-ink:#FFFFFF;
+  --btn:#0B3C8C; --btn-ink:#FFFFFF; --pop:#FF7A1A; --pop-ink:#1F0E00;
+  --ok:#1B8A4B; --bad:#C62F2F; --warn:#3C4D6E;
+  --okbg:#DDF3E5; --badbg:#FADDDA; --warnbg:#FFE6D1;
+  --okfg:#0E5A2E; --badfg:#8E1B1B; --warnfg:#9A4300;
+  --fd:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --fb:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#071226; --card:#0F2142; --ink:#EAF0FC; --mute:#9DB0D3; --line:#1E3562;
+    --head:#0A2E6E; --btn:#FF8A3D; --btn-ink:#1F0E00;
+    --okbg:#10301F; --badbg:#3A1717; --warnbg:#43260F; --okfg:#6FE3A1; --badfg:#FF9B94; --warnfg:#FFB070;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#071226; --card:#0F2142; --ink:#EAF0FC; --mute:#9DB0D3; --line:#1E3562;
+  --head:#0A2E6E; --btn:#FF8A3D; --btn-ink:#1F0E00;
+  --okbg:#10301F; --badbg:#3A1717; --warnbg:#43260F; --okfg:#6FE3A1; --badfg:#FF9B94; --warnfg:#FFB070;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:16px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--pop);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* topo */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--head);color:var(--head-ink);display:flex;align-items:center;gap:12px;padding:12px 16px}
+.top h1{margin:0;font-family:var(--fd);font-weight:900;font-size:26px;line-height:1;letter-spacing:.01em}
+.top p{margin:2px 0 0;font-size:13px;opacity:.8}
+.top .grow{flex:1;min-width:0}
+.top h1,.top p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo{width:40px;height:40px;flex:none;display:block}
+.badge{width:40px;height:40px;flex:none;border-radius:50%;background:var(--pop);color:var(--pop-ink);display:grid;place-items:center;font-family:var(--fd);font-weight:900;font-size:24px;
+  -webkit-mask:none;mask:none;
+  -webkit-mask:radial-gradient(circle at 0 50%,transparent 6px,#000 6.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 50%,transparent 6px,#000 6.5px) right/51% 100% no-repeat;
+  mask:radial-gradient(circle at 0 50%,transparent 6px,#000 6.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 50%,transparent 6px,#000 6.5px) right/51% 100% no-repeat}
+.badge{-webkit-mask:none!important;mask:none!important}
+.ghost{background:transparent;border:1px solid rgba(255,255,255,.4);color:inherit;border-radius:999px;padding:6px 12px;font-size:13px}
+
+main{max-width:640px;margin:0 auto;padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px))}
+h2.sec{font-family:var(--fd);font-weight:800;font-size:30px;margin:4px 0 12px;line-height:1}
+
+/* estatísticas */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-family:var(--fd);font-weight:900;font-size:38px;line-height:1}
+.stat span{font-size:13px;color:var(--mute)}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .4s}
+
+/* busca e filtros */
+.search{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);margin-bottom:10px}
+.chips{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font-size:14px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* lista */
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.row .who{flex:1;min-width:0}
+.row b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row small{color:var(--mute);font-size:13px}
+.pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.pill.pend{background:var(--warnbg);color:var(--warnfg)}
+.pill.used{background:var(--okbg);color:var(--okfg)}
+.empty{text-align:center;color:var(--mute);padding:36px 12px;border:1px dashed var(--line);border-radius:12px}
+
+/* formulário */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+.field{margin-bottom:14px}
+.in{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--bg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:14px 18px;background:var(--btn);color:var(--btn-ink);font-weight:700;width:100%}
+.btn.pop{background:var(--pop);color:var(--pop-ink)}
+.btn.line{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--bad)}
+.btn.sm{padding:10px 14px;width:auto}
+.hint{color:var(--mute);font-size:13px;margin:8px 0 0}
+
+/* navegação inferior */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(3,1fr);background:var(--card);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabs button{background:none;border:0;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:600;color:var(--mute);border-radius:10px}
+.tabs button svg{width:24px;height:24px}
+.tabs button[aria-current="true"]{color:var(--ink);background:color-mix(in srgb,var(--pop) 35%,transparent)}
+
+/* portaria */
+.cam{position:relative;aspect-ratio:1/1;background:#000;border-radius:16px;overflow:hidden;margin-bottom:12px}
+.cam video{width:100%;height:100%;object-fit:cover}
+.cam .off{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#cfd8d2;padding:24px;gap:12px}
+.cam .frame{position:absolute;inset:18%;border:3px solid var(--pop);border-radius:18px;pointer-events:none;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+.result{border-radius:16px;padding:20px;color:#fff;text-align:center;margin-bottom:12px}
+.result.idle{background:var(--card);color:var(--mute);border:1px dashed var(--line);padding:18px}
+.result.ok{background:var(--ok)}
+.result.used{background:var(--bad)}
+.result.invalid,.result.busy,.result.error,.result.wrongevent{background:var(--warn)}
+.result .big{font-family:var(--fd);font-weight:900;font-size:44px;line-height:1;margin:0 0 6px}
+.result .nm{font-size:22px;font-weight:700;margin:0}
+.result .sub{margin:4px 0 0;opacity:.92}
+.manual{display:flex;gap:8px;margin-bottom:18px}
+.manual .in{text-transform:uppercase}
+.log{display:flex;flex-direction:column;gap:6px}
+.log div{display:flex;gap:10px;align-items:center;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.log .t{color:var(--mute);font-variant-numeric:tabular-nums}
+.log .s{margin-left:auto;font-weight:700}
+.s.ok{color:var(--okfg)}.s.used{color:var(--badfg)}.s.invalid,.s.busy,.s.error,.s.wrongevent{color:var(--warnfg)}
+
+/* modal */
+#modal{position:fixed;inset:0;z-index:50;background:rgba(5,12,9,.7);display:flex;align-items:flex-end;justify-content:center;padding:0}
+.sheet{width:100%;max-width:520px;max-height:100%;overflow:auto;background:var(--bg);border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.sheet .x{float:right;background:none;border:0;font-size:26px;line-height:1;color:var(--mute);padding:0 4px}
+.tkwrap{filter:drop-shadow(0 6px 14px rgba(0,0,0,.25));margin:6px auto 14px;max-width:320px}
+.tk-top,.tk-bot{position:relative;background:#fff;color:#0A1B3A}
+.tk-top{background:#0B3C8C;color:#fff;border-radius:16px 16px 0 0;padding:18px 20px 22px;
+  -webkit-mask:radial-gradient(circle at 0 100%,transparent 12px,#000 12.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 100%,transparent 12px,#000 12.5px) right/51% 100% no-repeat;
+  mask:radial-gradient(circle at 0 100%,transparent 12px,#000 12.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 100%,transparent 12px,#000 12.5px) right/51% 100% no-repeat}
+.tk-bot{border-radius:0 0 16px 16px;padding:22px 20px 18px;text-align:center;
+  -webkit-mask:radial-gradient(circle at 0 0,transparent 12px,#000 12.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 0,transparent 12px,#000 12.5px) right/51% 100% no-repeat;
+  mask:radial-gradient(circle at 0 0,transparent 12px,#000 12.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 0,transparent 12px,#000 12.5px) right/51% 100% no-repeat}
+.tk-bot::before{content:"";position:absolute;left:18px;right:18px;top:0;border-top:2px dashed #b9c4bd}
+.tk-ev{margin:0;font-size:13px;opacity:.8;font-weight:600}
+.tk-top h2{margin:6px 0 4px;font-family:var(--fd);font-weight:900;font-size:36px;line-height:1;word-break:break-word}
+.tk-kind{margin:0;color:#FF9A3D;font-weight:700}
+.tk-bot canvas{width:220px;height:220px;image-rendering:pixelated;display:block;margin:0 auto 8px}
+.tk-bot code{color:#0A1B3A;font-size:15px;letter-spacing:.06em;font-weight:700}
+.stamp{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-14deg);border:4px solid #C62F2F;color:#C62F2F;background:rgba(255,255,255,.88);padding:8px 16px;border-radius:10px;font-family:var(--fd);font-weight:900;font-size:34px;line-height:1;text-align:center}
+.stamp small{display:block;font-family:var(--fb);font-size:13px;font-weight:700;margin-top:2px}
+.acts{display:grid;gap:8px}
+.png{width:100%;border-radius:12px;display:block;margin-bottom:10px}
+
+#toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;z-index:60;font-size:14px;font-weight:600;max-width:90%}
+
+/* telas de acesso */
+.gate{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px}
+.gate .box{max-width:380px;width:100%}
+.camst{position:absolute;left:8px;right:8px;bottom:8px;font-size:12px;color:#fff;background:rgba(0,0,0,.6);border-radius:8px;padding:4px 8px;pointer-events:none}
+.camst:empty{display:none}
+.evhead{display:flex;justify-content:space-between;align-items:center;margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.lnk{background:none;border:0;padding:4px 0;font-size:13px;font-weight:700;color:var(--btn);text-transform:none;letter-spacing:0;text-decoration:underline}
+.evbar{display:flex;gap:8px;overflow-x:auto;margin:0 -16px 14px;padding:2px 16px 6px;scroll-snap-type:x proximity;scrollbar-width:none}
+.evbar::-webkit-scrollbar{display:none}
+.evchip{flex:none;max-width:72vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:10px 18px;font-weight:600;scroll-snap-align:start}
+.evchip[aria-pressed="true"]{background:var(--pop);border-color:var(--pop);color:var(--pop-ink);font-weight:800}
+.evchip.add{border-style:dashed;color:var(--mute);background:transparent}
+.errbox{background:var(--badbg);color:var(--badfg);border-radius:12px;padding:12px 14px;font-weight:600;margin:0 0 14px}
+.gate h1.org{font-size:38px;line-height:1.02}
+.gate h1{font-family:var(--fd);font-weight:900;font-size:56px;line-height:.95;margin:14px 0 8px}
+.gate p{color:var(--mute);margin:0 0 18px}
+.err{color:var(--bad);font-weight:600;font-size:14px;margin:8px 0 0}
+.demo-tag{display:inline-block;background:var(--pop);color:var(--pop-ink);font-weight:700;font-size:12px;border-radius:99px;padding:3px 10px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.banner{background:var(--warnbg);color:var(--warnfg);border-radius:12px;padding:12px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:center;justify-content:space-between;font-size:14px;font-weight:600}
+.banner button{background:var(--warnfg);color:var(--warnbg);border:0;border-radius:999px;padding:6px 12px;font-weight:700;white-space:nowrap}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.two{grid-template-columns:1fr}}
+.money{margin:-6px 0 14px;font-size:14px;color:var(--mute)}
+.money b{color:var(--ink)}
+.toolbar{display:flex;gap:8px;margin-bottom:12px}
+.toolbar .search{margin:0;flex:1}
+.info{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:14px;display:grid;gap:4px}
+.info span{color:var(--mute)}
+.adm{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.adm .who{flex:1;min-width:0}
+.adm b{display:block;overflow:hidden;text-overflow:ellipsis}
+.adm small{color:var(--mute)}
+.adm .btn{padding:8px 10px;font-size:13px}
+.me{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.mini{font-size:12px;font-weight:700;background:var(--pop);color:var(--pop-ink);border-radius:99px;padding:2px 8px}
+.evsel{background:none;border:0;color:inherit;text-align:left;padding:0}
+.adm .selb{background:none;border:0;padding:0;text-align:left;flex:1;min-width:0}
+.adm.cur{border-color:var(--btn);box-shadow:inset 0 0 0 2px var(--btn)}
+.pill.def{background:var(--warnbg);color:var(--warnfg)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="modal" hidden></div>
+<div id="toast" hidden></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- configuração do Firebase (preencher para uso real) ---------- */
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyABdJMl0qaqX7Ja9Dkf7k_FV40aP_oFpNc",
+  authDomain:"atletica-unirio.firebaseapp.com",
+  projectId:"atletica-unirio",
+  appId:"1:40974088856:web:de7e27aa6dd8e28260eeed"
+};
+const FB_OK=!!(FIREBASE_CONFIG.apiKey&&!/COLE_AQUI/.test(FIREBASE_CONFIG.apiKey)&&FIREBASE_CONFIG.projectId&&!/COLE_AQUI/.test(FIREBASE_CONFIG.projectId));
+
+/* ---------- constantes ---------- */
+const SUPER_USER='a3pa';
+const SUPER_HASH='e462843bfbfd68e187f1687ddfc12fad5245a4086d7ce81dec2546cb85ed48f1';
+const DEFAULT_PW='1234';
+const KINDS=['Staff','Primeiro lote','Segundo lote','Terceiro lote'];
+
+/* ---------- utilidades ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ALPHA='ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+function rnd(n){ const a=new Uint8Array(n); crypto.getRandomValues(a); let s=''; for(const b of a) s+=ALPHA[b%ALPHA.length]; return s; }
+function newCode(){ const s=rnd(12); return 'ING-'+s.slice(0,4)+'-'+s.slice(4,8)+'-'+s.slice(8,12); }
+function extractCode(raw){ const m=String(raw||'').toUpperCase().match(/ING-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}/); return m?m[0]:null; }
+const fmt=iso=>{ try{ return new Date(iso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';} };
+const hm=iso=>{ try{ return new Date(iso).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';} };
+const brl=n=>Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+function parseMoney(s){ s=String(s==null?'':s).trim().replace(/[^\d.,]/g,''); if(!s) return 0; if(s.includes(',')) s=s.replace(/\./g,'').replace(',','.'); const n=parseFloat(s); return isNaN(n)?0:Math.round(n*100)/100; }
+function sha256js(str){
+  const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const b=Array.from(new TextEncoder().encode(str)), l=b.length*8;
+  b.push(0x80); while(b.length%64!==56) b.push(0);
+  for(let k=7;k>=0;k--) b.push(k>3?0:(l>>>(k*8))&255);
+  let h=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const rr=(x,n)=>(x>>>n)|(x<<(32-n));
+  for(let o=0;o<b.length;o+=64){
+    const w=new Array(64);
+    for(let t=0;t<16;t++) w[t]=(b[o+t*4]<<24)|(b[o+t*4+1]<<16)|(b[o+t*4+2]<<8)|b[o+t*4+3];
+    for(let t=16;t<64;t++){ const s0=rr(w[t-15],7)^rr(w[t-15],18)^(w[t-15]>>>3), s1=rr(w[t-2],17)^rr(w[t-2],19)^(w[t-2]>>>10); w[t]=(w[t-16]+s0+w[t-7]+s1)|0; }
+    let [a,bb,c,d,e,f,g,hh]=h;
+    for(let t=0;t<64;t++){
+      const S1=rr(e,6)^rr(e,11)^rr(e,25), ch=(e&f)^(~e&g), t1=(hh+S1+ch+K[t]+w[t])|0;
+      const S0=rr(a,2)^rr(a,13)^rr(a,22), mj=(a&bb)^(a&c)^(bb&c), t2=(S0+mj)|0;
+      hh=g; g=f; f=e; e=(d+t1)|0; d=c; c=bb; bb=a; a=(t1+t2)|0;
+    }
+    h=[(h[0]+a)|0,(h[1]+bb)|0,(h[2]+c)|0,(h[3]+d)|0,(h[4]+e)|0,(h[5]+f)|0,(h[6]+g)|0,(h[7]+hh)|0];
+  }
+  return h.map(x=>(x>>>0).toString(16).padStart(8,'0')).join('');
+}
+async function sha(s){
+  try{
+    if(window.crypto&&crypto.subtle){
+      const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+      return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+    }
+  }catch(e){}
+  return sha256js(s);
+}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let toastT;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2600); }
+
+/* ---------- bibliotecas com endereço reserva ---------- */
+function loadScript(url){ return new Promise((res,rej)=>{ const e=document.createElement('script'); e.src=url; e.onload=res; e.onerror=()=>rej(new Error('load')); document.head.appendChild(e); }); }
+async function ensureLib(test,urls){ if(test()) return true; for(const u of urls){ try{ await loadScript(u); if(test()) return true; }catch(e){} } return test(); }
+const libJsQR=()=>ensureLib(()=>typeof jsQR!=='undefined',['https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js','https://unpkg.com/jsqr@1.4.0/dist/jsQR.js']);
+libJsQR();
+ensureLib(()=>typeof qrcode!=='undefined',['https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js','https://unpkg.com/qrcode-generator@1.4.4/qrcode.js']);
+ensureLib(()=>!!(window.jspdf&&window.jspdf.jsPDF),['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js','https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js']);
+ensureLib(()=>typeof XLSX!=='undefined',['https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js','https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js']);
+
+/* ---------- estado ---------- */
+const state={api:null,mode:'',downloads:null,tickets:[],users:[],usersSeen:new Set(),local:{},events:[],eventId:null,migrated:false,evOk:false,tkOk:false,filter:'todos',q:'',tab:'lista',log:[],current:null,session:null};
+const LEGACY_ID='evento-1';
+const evOf=t=>t.eventId||LEGACY_ID;
+const curEvent=()=>state.events.find(e=>e.id===state.eventId)||{id:null,name:'Nenhum evento',date:''};
+const evById=id=>state.events.find(e=>e.id===id)||{id:id,name:'Evento removido',date:''};
+const tix=()=>state.tickets.filter(t=>evOf(t)===state.eventId);
+
+/* ---------- armazenamento: modo demo (local) ---------- */
+function makeDemo(){
+  const KEY='atletica-demo-v3';
+  let mem={tickets:{},users:{},events:{},evento:null};
+  try{ const r=localStorage.getItem(KEY); if(r) mem=Object.assign(mem,JSON.parse(r)||{}); }catch(e){}
+  const subs={t:new Set(),e:new Set(),u:new Set()};
+  const save=()=>{ try{localStorage.setItem(KEY,JSON.stringify(mem));}catch(e){} };
+  const lt=()=>Object.keys(mem.tickets).map(code=>Object.assign({code},mem.tickets[code]));
+  const lu=()=>Object.keys(mem.users).map(username=>Object.assign({username},mem.users[username]));
+  const le=()=>Object.keys(mem.events).map(id=>Object.assign({id},mem.events[id]));
+  const emit=()=>{ subs.t.forEach(f=>f(lt())); subs.e.forEach(f=>f(le())); subs.u.forEach(f=>f(lu())); };
+  return {
+    onTickets(cb){ subs.t.add(cb); cb(lt()); return ()=>subs.t.delete(cb); },
+    onEvents(cb){ subs.e.add(cb); cb(le()); return ()=>subs.e.delete(cb); },
+    onUsers(cb){ subs.u.add(cb); cb(lu()); return ()=>subs.u.delete(cb); },
+    async getLegacy(){ return mem.evento||null; },
+    async createEvent(id,d){ mem.events[id]=d; save(); emit(); },
+    async updateEvent(id,p){ if(!mem.events[id]) throw new Error('nf'); Object.assign(mem.events[id],p); save(); emit(); },
+    async removeEvent(id){ delete mem.events[id]; save(); emit(); },
+    async createTicket(code,d){ mem.tickets[code]=d; save(); emit(); },
+    async updateTicket(code,p){ if(!mem.tickets[code]) throw new Error('nf'); Object.assign(mem.tickets[code],p); save(); emit(); },
+    async removeTicket(code){ delete mem.tickets[code]; save(); emit(); },
+    async getUser(u){ return mem.users[u]||null; },
+    async putUser(u,d){ mem.users[u]=d; save(); emit(); },
+    async delUser(u){ delete mem.users[u]; save(); emit(); },
+    async validate(code,by,eventId){
+      const d=mem.tickets[code];
+      if(!d) return {status:'invalid'};
+      if((d.eventId||LEGACY_ID)!==eventId) return {status:'wrongevent',ticket:Object.assign({code},d)};
+      if(d.usedAt) return {status:'used',ticket:Object.assign({code},d)};
+      d.usedAt=new Date().toISOString(); d.usedBy=by; save(); emit();
+      return {status:'ok',ticket:Object.assign({code},d)};
+    }
+  };
+}
+
+/* ---------- armazenamento: nuvem (db do artifact) ---------- */
+function makeCloud(db){
+  const holder='gate-'+newCode();
+  return {
+    onTickets(cb){ return db.collection('tickets').onSnapshot(s=>cb(s.docs.filter(d=>d.exists&&d.data()&&d.data().name).map(d=>Object.assign({code:d.id},d.data())),s.metadata&&s.metadata.fromCache),e=>console.error(e)); },
+    onEvents(cb){ return db.collection('events').onSnapshot(s=>cb(s.docs.filter(d=>d.exists&&d.data()&&d.data().name).map(d=>Object.assign({id:d.id},d.data())),s.metadata&&s.metadata.fromCache),e=>console.error(e)); },
+    onUsers(cb){ return db.collection('users').onSnapshot(s=>cb(s.docs.filter(d=>d.exists&&d.data()&&d.data().hash).map(d=>Object.assign({username:d.id},d.data()))),e=>console.error(e)); },
+    async getLegacy(){ const s=await db.doc('config/evento').get(); return s.exists?s.data():null; },
+    async createEvent(id,d){ await db.doc('events/'+id).set(d); },
+    async updateEvent(id,p){ await db.doc('events/'+id).update(p); },
+    async removeEvent(id){ await db.doc('events/'+id).delete(); },
+    async createTicket(code,d){ await db.doc('tickets/'+code).set(d); },
+    async updateTicket(code,p){ await db.doc('tickets/'+code).update(p); },
+    async removeTicket(code){ await db.doc('tickets/'+code).delete(); },
+    async getUser(u){ const s=await db.doc('users/'+u).get(); return s.exists?s.data():null; },
+    async putUser(u,d){ await db.doc('users/'+u).set(d); },
+    async delUser(u){ await db.doc('users/'+u).delete(); },
+    async validate(code,by,eventId){
+      const ref=db.doc('tickets/'+code);
+      const why=e=>(e&&(e.code||e.message))||'erro';
+      const classify=d=>{
+        if(!d||!d.name) return {status:'invalid'};
+        if((d.eventId||LEGACY_ID)!==eventId) return {status:'wrongevent',ticket:Object.assign({code},d)};
+        if(d.usedAt) return {status:'used',ticket:Object.assign({code},d)};
+        return null;
+      };
+      let d;
+      try{ const sn=await ref.get(); d=sn.exists?sn.data():null; }
+      catch(e){ return {status:'error',msg:'Falha ao consultar o ingresso ('+why(e)+').'}; }
+      const early=classify(d); if(early) return early;
+      for(let i=0;i<4;i++){
+        let acq;
+        try{ acq=await ref.acquire({holder,ttlMs:1500}); }catch(e){ acq={acquired:true}; }
+        if(acq&&acq.acquired) break;
+        if(i===3) return {status:'busy'};
+        await sleep(350);
+      }
+      try{
+        const sn=await ref.get(); const d2=sn.exists?sn.data():null;
+        const again=classify(d2); if(again) return again;
+        const usedAt=new Date().toISOString();
+        await ref.update({usedAt,usedBy:by});
+        return {status:'ok',ticket:Object.assign({code},d2,{usedAt,usedBy:by})};
+      }catch(e){ return {status:'error',msg:'Falha ao validar ('+why(e)+'). Tente de novo.'}; }
+    }
+  };
+}
+
+/* ---------- armazenamento: Firebase (GitHub Pages / uso real) ---------- */
+function makeFirebase(cfg){
+  firebase.initializeApp(cfg);
+  const auth=firebase.auth(), fs=firebase.firestore();
+  const emailOf=(u,v)=>u+'+'+v+'@atletica.app';
+  const SUPER_EMAIL=emailOf(SUPER_USER,0);
+  const fpw=p=>p+'#a3pa';
+  const code=e=>(e&&(e.code||e.message))||'erro';
+  const denied=e=>{ console.error(e); if(e&&e.code==='permission-denied'&&state.session){ toast('Seu acesso foi removido ou expirou'); setTimeout(logout,1400); } };
+  async function dirV(u){ if(u===SUPER_USER) return 0; const sn=await fs.doc('directory/'+u).get(); return sn.exists?sn.data().v:null; }
+  async function sessionFor(user){
+    const sn=await fs.doc('admins/'+user.email).get(); if(!sn.exists) return null;
+    const d=sn.data();
+    return {user:d.username,isSuper:user.email===SUPER_EMAIL,mustChange:!!d.mustChange,name:d.displayName||d.username};
+  }
+  async function createAccount(u,name,startV){
+    const app2=firebase.apps.find(a=>a.name==='sec')||firebase.initializeApp(cfg,'sec');
+    const a2=app2.auth();
+    for(let v=startV;v<startV+10;v++){
+      const email=emailOf(u,v);
+      try{
+        await a2.createUserWithEmailAndPassword(email,fpw(DEFAULT_PW)); await a2.signOut();
+        await fs.doc('admins/'+email).set({username:u,displayName:name||'',mustChange:true,createdAt:new Date().toISOString()});
+        await fs.doc('directory/'+u).set({v});
+        return {};
+      }catch(e){ if(e&&e.code==='auth/email-already-in-use') continue; return {error:'Não foi possível criar ('+code(e)+')'}; }
+    }
+    return {error:'Não foi possível criar esse usuário'};
+  }
+  return {
+    async login(u,p){
+      if(!/^[a-z0-9._-]{3,24}$/.test(u)) return null;
+      const v=await dirV(u); if(v==null) return null;
+      const email=emailOf(u,v);
+      try{ await auth.signInWithEmailAndPassword(email,fpw(p)); }
+      catch(e){
+        const soft=['auth/invalid-credential','auth/user-not-found','auth/wrong-password','auth/invalid-login-credentials'];
+        if(!soft.includes(e&&e.code)) throw e;
+        if(u===SUPER_USER&&(await sha('a3pa-root:'+p))===SUPER_HASH){
+          try{ await auth.createUserWithEmailAndPassword(email,fpw(p)); }
+          catch(e2){ if(e2&&e2.code==='auth/email-already-in-use') return null; throw e2; }
+        }else return null;
+      }
+      let ses=null;
+      try{ ses=await sessionFor(auth.currentUser); }catch(e){}
+      if(!ses&&u===SUPER_USER){
+        await fs.doc('admins/'+email).set({username:u,displayName:'Super admin',mustChange:false,createdAt:new Date().toISOString()});
+        ses=await sessionFor(auth.currentUser);
+      }
+      if(!ses){ await auth.signOut(); return null; }
+      return ses;
+    },
+    async restore(){
+      const user=await new Promise(res=>{ const off=auth.onAuthStateChanged(x=>{ off(); res(x); }); });
+      if(!user) return null;
+      try{ const ses=await sessionFor(user); if(!ses){ await auth.signOut(); return null; } return ses; }catch(e){ return null; }
+    },
+    async logout(){ await auth.signOut(); },
+    async changePassword(p0,p1){
+      const user=auth.currentUser; if(!user) return {error:'Sessão expirada. Entre de novo.'};
+      try{ await user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email,fpw(p0))); }
+      catch(e){ return {error:'Senha atual incorreta.'}; }
+      try{ await user.updatePassword(fpw(p1)); await fs.doc('admins/'+user.email).update({mustChange:false}); return {}; }
+      catch(e){ return {error:'Não foi possível alterar agora ('+code(e)+').'}; }
+    },
+    async addAdmin(u,name){
+      if(u===SUPER_USER) return {error:'Esse usuário é reservado'};
+      try{
+        const ds=await fs.doc('directory/'+u).get(); if(ds.exists) return {error:'Esse usuário já existe'};
+        return await createAccount(u,name,1);
+      }catch(e){ return {error:'Não foi possível criar ('+code(e)+')'}; }
+    },
+    async resetAdmin(u){
+      try{
+        const ds=await fs.doc('directory/'+u).get(); if(!ds.exists) return {error:'Usuário não encontrado'};
+        const v=ds.data().v, old=emailOf(u,v);
+        const adm=await fs.doc('admins/'+old).get();
+        const r=await createAccount(u,adm.exists?adm.data().displayName:'',v+1);
+        if(!r.error) await fs.doc('admins/'+old).delete();
+        return r;
+      }catch(e){ return {error:'Não foi possível redefinir ('+code(e)+')'}; }
+    },
+    async deleteAdmin(u){
+      try{
+        const ds=await fs.doc('directory/'+u).get();
+        if(ds.exists){ await fs.doc('admins/'+emailOf(u,ds.data().v)).delete(); await fs.doc('directory/'+u).delete(); }
+        return {};
+      }catch(e){ return {error:'Não foi possível excluir ('+code(e)+')'}; }
+    },
+    onTickets(cb){ return fs.collection('tickets').onSnapshot(sn=>cb(sn.docs.map(d=>Object.assign({code:d.id},d.data())).filter(t=>t.name),sn.metadata.fromCache),denied); },
+    onEvents(cb){ return fs.collection('events').onSnapshot(sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data())).filter(e=>e.name),sn.metadata.fromCache),denied); },
+    onUsers(cb){ return fs.collection('admins').onSnapshot(sn=>cb(sn.docs.map(d=>d.data()).filter(d=>d.username&&d.username!==SUPER_USER)),denied); },
+    async getLegacy(){ return null; },
+    async createEvent(id,d){ await fs.doc('events/'+id).set(d); },
+    async updateEvent(id,p){ await fs.doc('events/'+id).update(p); },
+    async removeEvent(id){ await fs.doc('events/'+id).delete(); },
+    async createTicket(c,d){ await fs.doc('tickets/'+c).set(d); },
+    async updateTicket(c,p){ await fs.doc('tickets/'+c).update(p); },
+    async removeTicket(c){ await fs.doc('tickets/'+c).delete(); },
+    async validate(c,by,eventId){
+      const ref=fs.doc('tickets/'+c);
+      try{
+        return await fs.runTransaction(async tx=>{
+          const sn=await tx.get(ref); const d=sn.exists?sn.data():null;
+          if(!d||!d.name) return {status:'invalid'};
+          if((d.eventId||LEGACY_ID)!==eventId) return {status:'wrongevent',ticket:Object.assign({code:c},d)};
+          if(d.usedAt) return {status:'used',ticket:Object.assign({code:c},d)};
+          const usedAt=new Date().toISOString();
+          tx.update(ref,{usedAt,usedBy:by});
+          return {status:'ok',ticket:Object.assign({code:c},d,{usedAt,usedBy:by})};
+        });
+      }catch(e){ return {status:'error',msg:'Falha ao validar ('+code(e)+'). Tente de novo.'}; }
+    }
+  };
+}
+
+/* ---------- QR, PDF, Excel ---------- */
+function drawQR(cv,text,px){
+  if(typeof qrcode==='undefined'){ cv.width=cv.height=px; const c=cv.getContext('2d'); c.fillStyle='#fff'; c.fillRect(0,0,px,px); c.fillStyle='#000'; c.fillText('QR indisponível',10,20); return; }
+  const q=qrcode(0,'M'); q.addData(text); q.make();
+  const n=q.getModuleCount(), quiet=4, tot=n+quiet*2, s=Math.max(2,Math.floor(px/tot));
+  cv.width=cv.height=tot*s;
+  const c=cv.getContext('2d'); c.fillStyle='#fff'; c.fillRect(0,0,cv.width,cv.height); c.fillStyle='#000';
+  for(let r=0;r<n;r++) for(let k=0;k<n;k++) if(q.isDark(r,k)) c.fillRect((k+quiet)*s,(r+quiet)*s,s,s);
+}
+function ticketCanvas(t){
+  const W=900,H=1280, cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const c=cv.getContext('2d');
+  c.fillStyle='#0B3C8C'; c.fillRect(0,0,W,H);
+  c.fillStyle='#FF7A1A'; c.fillRect(0,0,W,16);
+  (function(){ const k=2.1, ox=W/2-24*k, oy=34;
+    const poly=(pts,col)=>{ c.fillStyle=col; c.beginPath(); pts.forEach((p,i)=>{ const x=ox+p[0]*k,y=oy+p[1]*k; i?c.lineTo(x,y):c.moveTo(x,y); }); c.closePath(); c.fill(); };
+    poly([[7,36],[41,36],[41,43],[7,43]],'#E85F00'); poly([[24,4],[33.5,37],[14.5,37]],'#FF7A1A');
+    poly([[21.4,14],[26.6,14],[28.1,19],[19.9,19]],'#fff'); poly([[18.2,26],[29.8,26],[31.3,31],[16.7,31]],'#fff');
+    c.fillStyle='#FF7A1A'; c.beginPath(); c.arc(ox+24*k,oy+5.4*k,2.4*k,0,7); c.fill(); })();
+  c.fillStyle='#fff'; c.font='600 34px "Hanken Grotesk",Arial,sans-serif'; c.textAlign='center';
+  const ev=evById(evOf(t)); c.fillText(ev.name+(ev.date?'  ·  '+ev.date:''),W/2,170,780);
+  let fs=110; const ff=s=>'900 '+s+'px "Big Shoulders Display","Arial Narrow",Impact,sans-serif';
+  c.font=ff(fs); while(c.measureText(t.name).width>780&&fs>40){ fs-=4; c.font=ff(fs); }
+  c.fillText(t.name,W/2,290);
+  c.fillStyle='#FF9A3D'; c.font='700 40px "Hanken Grotesk",Arial,sans-serif'; c.fillText(t.kind||'Ingresso',W/2,350);
+  c.fillStyle='#fff'; c.beginPath(); if(c.roundRect) c.roundRect(100,400,700,800,32); else c.rect(100,400,700,800); c.fill();
+  const q=document.createElement('canvas'); drawQR(q,t.code,560);
+  c.imageSmoothingEnabled=false; c.drawImage(q,170,450,560,560);
+  c.fillStyle='#0A1B3A'; c.font='700 44px "Hanken Grotesk",Arial,sans-serif'; c.fillText(t.code,W/2,1090);
+  c.fillStyle='#566684'; c.font='500 28px "Hanken Grotesk",Arial,sans-serif'; c.fillText('Uso único · apresente na portaria',W/2,1150);
+  return cv;
+}
+function ticketPDF(t){
+  const J=window.jspdf&&window.jspdf.jsPDF; if(!J) throw new Error('nopdf');
+  const pdf=new J({unit:'mm',format:'a4',orientation:'portrait'});
+  const w=130,h=w*1280/900, x=(210-w)/2, y=18;
+  pdf.setFillColor(237,242,250); pdf.rect(0,0,210,297,'F');
+  pdf.addImage(ticketCanvas(t).toDataURL('image/png'),'PNG',x,y,w,h);
+  pdf.setTextColor(60,70,64); pdf.setFontSize(11);
+  pdf.text('Ingresso individual e intransferível. O QR code só pode ser validado uma vez.',105,y+h+12,{align:'center'});
+  return pdf.output('blob');
+}
+async function saveFile(name,blob){
+  if(state.downloads){
+    try{ await state.downloads.save({filename:name,data:blob}); return true; }
+    catch(e){ if(e&&e.code==='declined') return false; }
+  }
+  try{
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000); return true;
+  }catch(e){ toast('Não foi possível salvar o arquivo'); return false; }
+}
+const slug=s=>String(s||'ingresso').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'').toLowerCase()||'ingresso';
+
+function exportExcel(all){
+  const X=window.XLSX; if(!X){ toast('Biblioteca de Excel indisponível'); return; }
+  if(!all&&!state.eventId){ toast('Crie um evento primeiro'); return; }
+  const evs=all?state.events.slice().sort((a,b)=>String(a.createdAt||'').localeCompare(String(b.createdAt||''))):[curEvent()];
+  const rows=state.tickets.filter(t=>all||evOf(t)===state.eventId).sort((a,b)=>String(a.createdAt||'').localeCompare(String(b.createdAt||'')));
+  const head=['Evento','Código','Nome','E-mail','Telefone','Tipo de entrada','Valor pago (R$)','Status','Entrada em','Validado por','Emitido em','Emitido por'];
+  const data=rows.map(t=>[evById(evOf(t)).name,t.code,t.name,t.email||'',t.phone||'',t.kind||'',Number(t.paid||0),t.usedAt?'Entrou':'Pendente',t.usedAt?fmt(t.usedAt):'',t.usedBy||'',t.createdAt?fmt(t.createdAt):'',t.createdBy||'']);
+  const ws=X.utils.aoa_to_sheet([head].concat(data));
+  ws['!cols']=[{wch:26},{wch:18},{wch:30},{wch:28},{wch:16},{wch:16},{wch:14},{wch:10},{wch:16},{wch:14},{wch:16},{wch:14}];
+  data.forEach((_,i)=>{ const c=ws[X.utils.encode_cell({r:i+1,c:6})]; if(c) c.z='"R$" #,##0.00'; });
+  const res=[['Evento','Tipo de entrada','Emitidos','Entraram','Arrecadado (R$)']];
+  evs.forEach(ev=>{
+    const er=rows.filter(t=>evOf(t)===ev.id);
+    const kinds=KINDS.concat(Array.from(new Set(er.map(t=>t.kind).filter(k=>k&&!KINDS.includes(k)))));
+    kinds.forEach(k=>{ const r=er.filter(t=>t.kind===k); if(all&&!r.length) return; res.push([ev.name,k,r.length,r.filter(t=>t.usedAt).length,r.reduce((a,t)=>a+Number(t.paid||0),0)]); });
+  });
+  res.push(['TOTAL','',rows.length,rows.filter(t=>t.usedAt).length,rows.reduce((a,t)=>a+Number(t.paid||0),0)]);
+  const ws2=X.utils.aoa_to_sheet(res); ws2['!cols']=[{wch:26},{wch:18},{wch:10},{wch:10},{wch:16}];
+  for(let i=1;i<res.length;i++){ const c=ws2[X.utils.encode_cell({r:i,c:4})]; if(c) c.z='"R$" #,##0.00'; }
+  const wb=X.utils.book_new(); X.utils.book_append_sheet(wb,ws,'Ingressos'); X.utils.book_append_sheet(wb,ws2,'Resumo');
+  const out=X.write(wb,{bookType:'xlsx',type:'array'});
+  const blob=new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  saveFile(all?'ingressos-todos-os-eventos.xlsx':'ingressos-'+slug(curEvent().name)+'.xlsx',blob).then(ok=>{ if(ok) toast('Planilha pronta'); });
+}
+
+/* ---------- telas de acesso ---------- */
+function gateScreen(html){ $('#root').innerHTML='<div class="gate"><div class="box">'+html+'</div></div>'; }
+const CONE_SVG=(sz)=>'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="36" width="34" height="7" rx="2" fill="#E85F00"/><polygon points="24,4 33.5,37 14.5,37" fill="#FF7A1A"/><polygon points="21.4,14 26.6,14 28.1,19 19.9,19" fill="#fff"/><polygon points="18.2,26 29.8,26 31.3,31 16.7,31" fill="#fff"/><circle cx="24" cy="5.4" r="2.4" fill="#FF7A1A"/></svg>';
+const logo='<div style="width:64px;height:64px;border-radius:18px;background:#0B3C8C;display:grid;place-items:center">'+CONE_SVG(46)+'</div>';
+function showLoading(){ gateScreen(logo+'<h1>Carregando…</h1><p>Verificando acesso.</p>'); }
+function showRestricted(){ gateScreen(logo+'<h1>Acesso restrito</h1><p>Esta área é exclusiva da equipe da atlética. Peça a quem criou o link para te dar permissão de colaborador.</p>'); }
+function showLogin(err){
+  gateScreen(logo+'<h1 class="org">Atlética Acadêmica Pão de Açúcar - A³pa</h1>'+(state.mode==='demo'?'<p><span class="demo-tag">Modo teste · dados só neste aparelho</span></p>':'')+
+   '<p>Entre com seu usuário de administrador.</p>'+(err?'<div class="errbox" role="alert">'+esc(err)+'</div>':'')+
+   '<form id="login"><div class="field"><label for="lu">Usuário</label><input id="lu" class="in" autocomplete="username" autocapitalize="none" autocorrect="off" required></div>'+
+   '<div class="field"><label for="pw">Senha</label><input id="pw" class="in" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></div><label style="display:flex;gap:8px;align-items:center;font-weight:500;margin:-6px 0 14px"><input type="checkbox" id="showpw"> Mostrar senha</label>'+
+   '<button class="btn" type="submit">Entrar</button>'+
+   '<p class="hint">Primeiro acesso: a senha padrão é <b>'+DEFAULT_PW+'</b>. Você poderá trocá-la depois de entrar.</p></form><p class="hint" style="margin-top:18px">Versão 10 · '+(state.mode==='firebase'?'conectado ao Firebase':state.mode==='cloud'?'claude.ai':'modo teste')+'</p>');
+  $('#showpw').addEventListener('change',e=>{ $('#pw').type=e.target.checked?'text':'password'; });
+  $('#login').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const u=$('#lu').value.trim().replace(/^@/,'').toLowerCase(), p=$('#pw').value;
+    const btn=e.submitter; if(btn){ btn.disabled=true; btn.textContent='Entrando…'; }
+    try{
+      const s=await (state.api.login?state.api.login(u,p):authenticate(u,p));
+      if(!s){ showLogin('Usuário ou senha incorretos.'); return; }
+      state.session=s; try{ sessionStorage.setItem('atl-session',u); }catch(x){}
+      startApp();
+    }catch(x){ showLogin('Não foi possível entrar agora ('+((x&&(x.code||x.message))||'erro')+').'); }
+  });
+}
+async function authenticate(u,p){
+  if(u===SUPER_USER){ return (await sha('a3pa-root:'+p))===SUPER_HASH?{user:u,isSuper:true,mustChange:false,name:'Super admin'}:null; }
+  if(!/^[a-z0-9._-]{3,24}$/.test(u)) return null;
+  const d=await state.api.getUser(u); if(!d||!d.hash) return null;
+  return (await sha(d.salt+':'+p))===d.hash?{user:u,isSuper:false,mustChange:!!d.mustChange,name:d.displayName||u}:null;
+}
+function logout(){ try{sessionStorage.removeItem('atl-session');}catch(e){}
+  if(state.api&&state.api.logout){ Promise.resolve(state.api.logout()).catch(()=>{}).then(()=>location.reload()); } else location.reload(); }
+
+/* ---------- app ---------- */
+const icons={
+  lista:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>',
+  novo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>',
+  portaria:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M7 12h10"/></svg>',
+  admin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M17 11l2 2 3-4"/></svg>'
+};
+function ticketFields(p,t){
+  t=t||{};
+  return '<div class="field"><label for="'+p+'n">Nome completo</label><input id="'+p+'n" class="in" required maxlength="80" value="'+esc(t.name||'')+'" placeholder="Ex.: Marina Souza"></div>'+
+  '<div class="field"><label for="'+p+'e">E-mail</label><input id="'+p+'e" class="in" type="email" inputmode="email" maxlength="80" value="'+esc(t.email||'')+'" placeholder="nome@email.com"></div>'+
+  '<div class="two"><div class="field"><label for="'+p+'t">Telefone</label><input id="'+p+'t" class="in" type="tel" inputmode="tel" maxlength="20" value="'+esc(t.phone||'')+'" placeholder="(21) 90000-0000"></div>'+
+  '<div class="field"><label for="'+p+'v">Valor pago (R$)</label><input id="'+p+'v" class="in" inputmode="decimal" value="'+(t.paid?String(t.paid).replace('.',','):'')+'" placeholder="0,00"></div></div>'+
+  '<div class="field"><label for="'+p+'k">Tipo de entrada</label><select id="'+p+'k" class="in">'+KINDS.concat(t.kind&&!KINDS.includes(t.kind)?[t.kind]:[]).map(k=>'<option'+(k===t.kind?' selected':'')+'>'+esc(k)+'</option>').join('')+'</select></div>';
+}
+function readFields(p){ return {name:$('#'+p+'n').value.trim(),email:$('#'+p+'e').value.trim(),phone:$('#'+p+'t').value.trim(),paid:parseMoney($('#'+p+'v').value),kind:$('#'+p+'k').value}; }
+
+function buildShell(){
+  const sup=state.session.isSuper;
+  const tabs=[['lista','Lista'],['novo','Novo'],['portaria','Portaria']].concat(sup?[['admin','Admins']]:[]);
+  $('#root').innerHTML=
+  '<header class="top"><span class="logo">'+CONE_SVG(40)+'</span><button class="evsel grow" data-act="eventos" aria-label="Trocar de evento"><h1 id="evName"></h1><p id="evSub"></p></button><button class="ghost" data-act="conta">'+esc(state.session.user)+'</button></header>'+
+  '<main><div id="evbar"></div><div id="banner"></div>'+
+    '<section id="v-lista">'+
+      '<div class="stats"><div class="stat"><b id="sTot">0</b><span>Na lista</span></div><div class="stat"><b id="sIn">0</b><span>Entraram</span></div><div class="stat"><b id="sLeft">0</b><span>Faltam</span></div></div>'+
+      '<div class="bar"><i id="sBar"></i></div>'+
+      '<p class="money">Arrecadado: <b id="sMoney">R$ 0,00</b></p>'+
+      '<div class="toolbar"><input id="q" class="search" type="search" placeholder="Buscar nome, e-mail, telefone ou código" autocomplete="off"><button class="btn line sm" data-act="export">Excel</button></div>'+
+      '<div class="chips" id="chips"><button class="chip" data-filter="todos">Todos</button><button class="chip" data-filter="pend">Pendentes</button><button class="chip" data-filter="used">Entraram</button></div>'+
+      '<div class="list" id="list"></div>'+
+    '</section>'+
+    '<section id="v-novo" hidden><h2 class="sec">Novo ingresso</h2>'+
+      '<form class="card" id="fNovo" autocomplete="off">'+ticketFields('n')+
+        '<button class="btn pop" type="submit">Gerar ingresso com QR code</button><p class="hint">Cada QR code é único e só pode ser usado uma vez na portaria.</p></form></section>'+
+    '<section id="v-portaria" hidden><h2 class="sec">Portaria</h2>'+
+      '<div class="cam"><video id="cam" playsinline muted></video><div class="frame" id="frame" hidden></div>'+
+        '<div class="off" id="camOff"></div><div class="camst" id="camst"></div></div>'+
+      '<div id="result" class="result idle">Aguardando leitura…</div>'+
+      '<div class="two" style="margin-bottom:10px"><button class="btn line" data-act="photo">Tirar foto do QR</button><button class="btn line" data-act="gallery">Escolher imagem</button></div><input id="photo" type="file" accept="image/*" capture="environment" hidden><input id="gallery" type="file" accept="image/*" hidden><form class="manual" id="fManual"><input id="mc" class="in" placeholder="Ou digite o código ING-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters"><button class="btn sm" type="submit">Validar</button></form>'+
+      '<h2 class="sec" style="font-size:22px">Últimas leituras</h2><div class="log" id="log"><p class="hint">Nenhuma leitura ainda.</p></div></section>'+
+    (sup?'<section id="v-admin" hidden></section>':'')+
+  '</main>'+
+  '<nav class="tabs" style="grid-template-columns:repeat('+tabs.length+',1fr)">'+tabs.map(t=>'<button data-tab="'+t[0]+'">'+icons[t[0]]+t[1]+'</button>').join('')+'</nav>';
+  $('#camOff').innerHTML=camIdle();
+  $('#q').addEventListener('input',e=>{ state.q=e.target.value; renderList(); });
+  $('#fNovo').addEventListener('submit',onCreate);
+  $('#photo').addEventListener('change',onPhoto);
+  $('#gallery').addEventListener('change',onPhoto);
+  $('#fManual').addEventListener('submit',e=>{ e.preventDefault(); const v=$('#mc').value; $('#mc').value=''; handleScan(v,true); });
+  setTab('lista'); renderHead(); renderList(); renderBanner(); if(sup) renderAdmin();
+}
+const camIdle=()=>'<div><p style="margin:0 0 12px">Aponte a câmera para o QR code do ingresso.</p><button class="btn pop sm" data-act="cam">Ativar câmera</button></div>';
+function renderBanner(){
+  const b=$('#banner'); if(!b) return;
+  b.innerHTML=state.session.mustChange?'<div class="banner"><span>Você ainda usa a senha padrão.</span><button data-act="senha">Trocar agora</button></div>':'';
+}
+function setTab(t){
+  state.tab=t;
+  ['lista','novo','portaria','admin'].forEach(k=>{ const s=$('#v-'+k); if(s) s.hidden=(k!==t); });
+  document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===t?'true':'false'));
+  if(t!=='portaria') stopCam();
+  else if(!scan.active) startCam();
+  window.scrollTo(0,0);
+}
+function renderHead(){
+  const n=$('#evName'); if(!n) return;
+  const ev=curEvent();
+  n.textContent=ev.name;
+  $('#evSub').textContent=ev.date||'Controle de ingressos';
+  renderEvBar();
+}
+function renderEvBar(){
+  const bar=$('#evbar'); if(!bar) return;
+  const evs=state.events.slice().sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
+  bar.innerHTML='<div class="evhead"><span>Evento</span><button class="lnk" data-act="eventos">Gerenciar</button></div>'+
+    '<div class="evbar" id="evchips">'+evs.map(ev=>'<button class="evchip" data-act="selev" data-ev="'+esc(ev.id)+'" aria-pressed="'+(ev.id===state.eventId?'true':'false')+'">'+esc(ev.name)+'</button>').join('')+
+    '<button class="evchip add" data-act="newev">+ Novo evento</button></div>';
+  const c=$('#evchips'), sel=c&&c.querySelector('[aria-pressed="true"]');
+  if(sel) c.scrollLeft=Math.max(0,sel.offsetLeft-(c.clientWidth-sel.clientWidth)/2);
+}
+function renderList(){
+  if(!$('#list')) return;
+  const all=tix().sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
+  const used=all.filter(t=>t.usedAt).length;
+  $('#sTot').textContent=all.length; $('#sIn').textContent=used; $('#sLeft').textContent=all.length-used;
+  $('#sBar').style.width=(all.length?Math.round(used/all.length*100):0)+'%';
+  $('#sMoney').textContent=brl(all.reduce((s,t)=>s+Number(t.paid||0),0));
+  document.querySelectorAll('#chips .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.filter===state.filter?'true':'false'));
+  const q=state.q.trim().toLowerCase();
+  const rows=all.filter(t=>{
+    if(state.filter==='pend'&&t.usedAt) return false;
+    if(state.filter==='used'&&!t.usedAt) return false;
+    return !q||[t.name,t.code,t.email,t.phone].some(v=>String(v||'').toLowerCase().includes(q));
+  });
+  const L=$('#list');
+  if(!state.eventId){ L.innerHTML='<div class="empty">Nenhum evento criado ainda.<br><br><button class="btn pop sm" data-act="newev">Criar o primeiro evento</button></div>'; return; }
+  if(!all.length){ L.innerHTML='<div class="empty">Nenhum convidado neste evento ainda.<br>Use a aba <b>Novo</b> para gerar o primeiro ingresso.</div>'; return; }
+  if(!rows.length){ L.innerHTML='<div class="empty">Nada encontrado.</div>'; return; }
+  L.innerHTML=rows.map(t=>
+    '<button class="row" data-code="'+esc(t.code)+'"><span class="who"><b>'+esc(t.name)+'</b><small>'+esc(t.kind||'')+(t.paid?' · '+brl(t.paid):'')+'</small></span>'+
+    (t.usedAt?'<span class="pill used">Entrou '+esc(hm(t.usedAt))+'</span>':'<span class="pill pend">Pendente</span>')+'</button>').join('');
+}
+
+/* ---------- administradores (somente a3pa) ---------- */
+function renderAdmin(){
+  const s=$('#v-admin'); if(!s) return;
+  const us=state.users.slice().sort((a,b)=>a.username.localeCompare(b.username));
+  s.innerHTML='<h2 class="sec">Administradores</h2>'+
+  '<form class="card" id="fAdm" autocomplete="off" style="margin-bottom:14px"><div class="field"><label for="au">Usuário (login)</label><input id="au" class="in" required minlength="3" maxlength="24" pattern="[a-zA-Z0-9._\\-]{3,24}" autocapitalize="none" placeholder="ex.: joao.silva"></div>'+
+  '<div class="field"><label for="an">Nome (opcional)</label><input id="an" class="in" maxlength="40" placeholder="João Silva"></div>'+
+  '<button class="btn" type="submit">Criar acesso</button><p class="hint">A senha inicial é <b>'+DEFAULT_PW+'</b>. A pessoa poderá trocá-la ao entrar.</p></form>'+
+  '<div class="adm"><div class="who"><b>'+SUPER_USER+'</b><small>Super admin · gerencia acessos</small></div><span class="mini">fixo</span></div>'+
+  (us.length?us.map(u=>'<div class="adm"><div class="who"><b>'+esc(u.username)+'</b><small>'+esc(u.displayName||'')+(u.mustChange?(u.displayName?' · ':'')+'senha padrão':'')+'</small></div>'+
+    '<button class="btn line" data-act="resetadm" data-user="'+esc(u.username)+'">Redefinir</button><button class="btn danger" data-act="deladm" data-user="'+esc(u.username)+'">Excluir</button></div>').join(''):'<div class="empty">Nenhum outro administrador ainda.</div>');
+  $('#fAdm').addEventListener('submit',onAddAdmin);
+}
+async function onAddAdmin(e){
+  e.preventDefault();
+  const u=$('#au').value.trim().toLowerCase(), name=$('#an').value.trim();
+  if(!/^[a-z0-9._-]{3,24}$/.test(u)) { toast('Use 3 a 24 letras, números, ponto, hífen ou _'); return; }
+  if(u===SUPER_USER){ toast('Esse usuário é reservado'); return; }
+  if(state.api.addAdmin){ const r=await state.api.addAdmin(u,name); if(r&&r.error) toast(r.error); else { toast('Acesso criado · senha '+DEFAULT_PW); $('#fAdm').reset(); } return; }
+  try{
+    if(await state.api.getUser(u)){ toast('Esse usuário já existe'); return; }
+    const salt=rnd(10);
+    await state.api.putUser(u,{salt,hash:await sha(salt+':'+DEFAULT_PW),displayName:name,mustChange:true,createdAt:new Date().toISOString()});
+    toast('Acesso criado · senha '+DEFAULT_PW);
+  }catch(x){ toast('Não foi possível criar o acesso'); }
+}
+
+/* ---------- criar / ver / editar ingresso ---------- */
+async function onCreate(e){
+  e.preventDefault();
+  const f=readFields('n'); if(!f.name) return;
+  if(!state.eventId){ toast('Crie um evento primeiro'); return; }
+  const code=newCode();
+  const data=Object.assign(f,{eventId:state.eventId,createdAt:new Date().toISOString(),createdBy:state.session.user,usedAt:null});
+  const btn=e.submitter; if(btn) btn.disabled=true;
+  try{ await state.api.createTicket(code,data); state.local[code]=data; e.target.reset(); showTicket(code); toast('Ingresso criado'); }
+  catch(err){ toast('Não foi possível salvar. Verifique suas permissões.'); }
+  if(btn) btn.disabled=false;
+}
+function findTicket(code){ const t=state.tickets.find(x=>x.code===code); if(t) return t; return state.local[code]?Object.assign({code},state.local[code]):null; }
+function openModal(html){ const m=$('#modal'); m.innerHTML='<div class="sheet"><button class="x" data-act="close" aria-label="Fechar">×</button>'+html+'</div>'; m.hidden=false; }
+function closeModal(){ $('#modal').hidden=true; $('#modal').innerHTML=''; state.current=null; }
+function showTicket(code){
+  const t=findTicket(code); if(!t) return;
+  state.current=code;
+  openModal(
+    '<div class="tkwrap"><div class="tk-top"><p class="tk-ev">'+esc(evById(evOf(t)).name)+(evById(evOf(t)).date?' · '+esc(evById(evOf(t)).date):'')+'</p><h2>'+esc(t.name)+'</h2><p class="tk-kind">'+esc(t.kind||'Ingresso')+'</p></div>'+
+    '<div class="tk-bot"><canvas id="tkqr" aria-label="QR code do ingresso"></canvas><code>'+esc(t.code)+'</code>'+
+    (t.usedAt?'<div class="stamp">UTILIZADO<small>'+esc(fmt(t.usedAt))+'</small></div>':'')+'</div></div>'+
+    '<div class="info"><div><span>E-mail:</span> '+esc(t.email||'—')+'</div><div><span>Telefone:</span> '+esc(t.phone||'—')+'</div><div><span>Valor pago:</span> <b>'+brl(t.paid)+'</b></div></div>'+
+    '<div class="acts"><button class="btn pop" data-act="pdf">Baixar ingresso em PDF</button><button class="btn" data-act="share">Compartilhar PDF</button>'+
+    '<button class="btn line" data-act="edit">Editar dados</button><button class="btn line" data-act="copy">Copiar código</button>'+(state.session.isSuper?'<button class="btn danger" data-act="del">Excluir ingresso</button>':'')+'</div>');
+  drawQR($('#tkqr'),t.code,440);
+}
+function showEdit(code){
+  const t=findTicket(code); if(!t) return;
+  openModal('<h2 class="sec">Editar dados</h2><form id="fEdit" autocomplete="off">'+ticketFields('x',t)+
+    '<div class="acts"><button class="btn" type="submit">Salvar alterações</button><button class="btn line" type="button" data-act="back">Cancelar</button></div><p class="hint">O QR code não muda ao editar.</p></form>');
+  $('#fEdit').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const f=readFields('x'); if(!f.name) return;
+    try{
+      await state.api.updateTicket(code,f);
+      const cur=state.tickets.find(x=>x.code===code); if(cur) Object.assign(cur,f);
+      if(state.local[code]) Object.assign(state.local[code],f);
+      renderList(); showTicket(code); toast('Dados atualizados');
+    }catch(x){ toast('Não foi possível salvar'); }
+  });
+}
+async function pdfFor(t){ try{ return ticketPDF(t); }catch(e){ toast('Não foi possível gerar o PDF'); return null; } }
+async function downloadPDF(){
+  const t=findTicket(state.current); if(!t) return;
+  const b=await pdfFor(t); if(!b) return;
+  if(await saveFile('ingresso-'+slug(t.name)+'.pdf',b)) toast('PDF gerado');
+}
+async function sharePDF(){
+  const t=findTicket(state.current); if(!t) return;
+  const b=await pdfFor(t); if(!b) return;
+  const name='ingresso-'+slug(t.name)+'.pdf';
+  try{
+    const file=new File([b],name,{type:'application/pdf'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'Ingresso · '+evById(evOf(t)).name}); return; }
+  }catch(e){ if(e&&e.name==='AbortError') return; }
+  if(await saveFile(name,b)) toast('Compartilhamento indisponível aqui. PDF salvo.');
+}
+
+/* ---------- conta / senha / evento ---------- */
+function showConta(){
+  const s=state.session;
+  openModal('<h2 class="sec">Minha conta</h2><div class="me"><div class="badge">'+esc(s.user[0].toUpperCase())+'</div><div><b>'+esc(s.name)+'</b><br><small style="color:var(--mute)">@'+esc(s.user)+(s.isSuper?' · super admin':'')+'</small></div></div>'+
+    '<div class="acts">'+(s.isSuper?'':'<button class="btn" data-act="senha">Alterar senha</button>')+'<button class="btn line" data-act="eventos">Eventos</button><button class="btn line" data-act="export">Excel do evento atual</button><button class="btn danger" data-act="sair">Sair</button></div>'+
+    (s.isSuper?'<p class="hint">A senha do super admin é fixa neste protótipo.</p>':''));
+}
+function showSenha(){
+  openModal('<h2 class="sec">Alterar senha</h2><form id="fPw" autocomplete="off"><div class="field"><label for="p0">Senha atual</label><input id="p0" class="in" type="password" required autocomplete="current-password"></div>'+
+    '<div class="field"><label for="p1">Nova senha</label><input id="p1" class="in" type="password" required minlength="4" autocomplete="new-password"></div>'+
+    '<div class="field"><label for="p2">Repita a nova senha</label><input id="p2" class="in" type="password" required minlength="4" autocomplete="new-password"></div>'+
+    '<button class="btn" type="submit">Salvar nova senha</button><p class="err" id="pwErr" hidden></p></form>');
+  $('#fPw').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const err=m=>{ const x=$('#pwErr'); x.textContent=m; x.hidden=false; };
+    const p0=$('#p0').value,p1=$('#p1').value,p2=$('#p2').value;
+    if(p1!==p2) return err('As senhas novas não são iguais.');
+    if(p1===DEFAULT_PW) return err('Escolha uma senha diferente da padrão.');
+    if(state.api.changePassword){
+      const r=await state.api.changePassword(p0,p1);
+      if(r&&r.error) return err(r.error);
+      state.session.mustChange=false; renderBanner(); closeModal(); toast('Senha alterada'); return;
+    }
+    try{
+      const d=await state.api.getUser(state.session.user);
+      if(!d||(await sha(d.salt+':'+p0))!==d.hash) return err('Senha atual incorreta.');
+      const salt=rnd(10);
+      await state.api.putUser(state.session.user,Object.assign({},d,{salt,hash:await sha(salt+':'+p1),mustChange:false}));
+      state.session.mustChange=false; renderBanner(); closeModal(); toast('Senha alterada');
+    }catch(x){ err('Não foi possível alterar agora.'); }
+  });
+}
+function saveSel(){ try{ localStorage.setItem('atl-event',state.eventId||''); }catch(e){} }
+function selectEvent(id){ state.eventId=id; saveSel(); state.q=''; state.filter='todos'; const q=$('#q'); if(q) q.value=''; renderHead(); renderList(); closeModal(); }
+function ensureEvent(){
+  if(state.events.find(e=>e.id===state.eventId)) return;
+  let saved=null; try{ saved=localStorage.getItem('atl-event'); }catch(e){}
+  const ok=state.events.find(e=>e.id===saved);
+  const newest=state.events.slice().sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')))[0];
+  state.eventId=ok?ok.id:(newest?newest.id:null);
+}
+async function maybeMigrate(){
+  if(state.migrated||!state.evOk||!state.tkOk) return;
+  state.migrated=true;
+  if(state.events.length) return;
+  try{
+    const legacy=await state.api.getLegacy();
+    const hasOld=state.tickets.some(t=>!t.eventId);
+    if(!legacy&&!hasOld) return;
+    const d={name:(legacy&&legacy.name)||'Churrasco da Atlética',date:(legacy&&legacy.date)||'',createdAt:'2000-01-01T00:00:00.000Z',createdBy:state.session.user};
+    await state.api.createEvent(LEGACY_ID,d);
+    if(!state.events.find(e=>e.id===LEGACY_ID)) state.events.push(Object.assign({id:LEGACY_ID},d));
+    ensureEvent(); renderHead(); renderList();
+  }catch(e){}
+}
+function showEventos(){
+  const evs=state.events.slice().sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||'')));
+  openModal('<h2 class="sec">Eventos</h2>'+
+    (evs.length?evs.map(ev=>{
+      const ts=state.tickets.filter(t=>evOf(t)===ev.id), used=ts.filter(t=>t.usedAt).length;
+      return '<div class="adm'+(ev.id===state.eventId?' cur':'')+'"><button class="selb" data-act="selev" data-ev="'+esc(ev.id)+'"><b>'+esc(ev.name)+(ev.id===state.eventId?' <span class="mini">atual</span>':'')+'</b><small>'+esc(ev.date||'Sem data')+' · '+ts.length+' ingressos · '+used+' entraram</small></button>'+
+        '<button class="btn line" data-act="editev" data-ev="'+esc(ev.id)+'">Editar</button></div>';
+    }).join(''):'<div class="empty" style="margin-bottom:12px">Nenhum evento ainda.</div>')+
+    '<div class="acts" style="margin-top:12px"><button class="btn pop" data-act="newev">Novo evento</button>'+(evs.length?'<button class="btn line" data-act="exportall">Excel de todos os eventos</button>':'')+'</div>');
+}
+function showEventForm(id){
+  const ev=id?state.events.find(e=>e.id===id):null;
+  if(id&&!ev) return;
+  openModal('<h2 class="sec">'+(ev?'Editar evento':'Novo evento')+'</h2><form id="fEv" autocomplete="off"><div class="field"><label for="en">Nome do evento</label><input id="en" class="in" required maxlength="60" value="'+esc(ev?ev.name:'')+'" placeholder="Ex.: Calourada 2026"></div>'+
+    '<div class="field"><label for="ed">Data / local</label><input id="ed" class="in" maxlength="60" placeholder="Ex.: 18/10 · Quadra da Atlética" value="'+esc(ev?ev.date||'':'')+'"></div>'+
+    '<div class="acts"><button class="btn" type="submit">'+(ev?'Salvar':'Criar evento')+'</button><button class="btn line" type="button" data-act="eventos">Cancelar</button>'+
+    (ev&&state.session.isSuper?'<button class="btn danger" type="button" data-act="delev" data-ev="'+esc(ev.id)+'">Excluir evento e seus ingressos</button>':'')+'</div></form>');
+  $('#fEv').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const name=$('#en').value.trim(), date=$('#ed').value.trim(); if(!name) return;
+    try{
+      if(ev){ await state.api.updateEvent(ev.id,{name,date}); Object.assign(ev,{name,date}); renderHead(); showEventos(); toast('Evento atualizado'); }
+      else{
+        const nid='ev-'+rnd(6), d={name,date,createdAt:new Date().toISOString(),createdBy:state.session.user};
+        await state.api.createEvent(nid,d);
+        if(!state.events.find(x=>x.id===nid)) state.events.push(Object.assign({id:nid},d));
+        selectEvent(nid); toast('Evento criado');
+      }
+    }catch(x){ toast('Não foi possível salvar o evento'); }
+  });
+}
+async function deleteEvent(id){
+  if(!state.session.isSuper) return;
+  try{
+    const ts=state.tickets.filter(t=>evOf(t)===id);
+    for(const t of ts){ await state.api.removeTicket(t.code); }
+    await state.api.removeEvent(id);
+    state.events=state.events.filter(e=>e.id!==id); state.tickets=state.tickets.filter(t=>evOf(t)!==id);
+    ensureEvent(); renderHead(); renderList(); showEventos(); toast('Evento excluído');
+  }catch(x){ toast('Não foi possível excluir'); }
+}
+
+/* ---------- portaria / leitura ---------- */
+const scan={stream:null,active:false,last:'',until:0,cv:document.createElement('canvas'),inflight:new Set(),bd:null,busy:false};
+try{ if('BarcodeDetector' in window) scan.bd=new BarcodeDetector({formats:['qr_code']}); }catch(e){ scan.bd=null; }
+async function startCam(){
+  if(scan.active) return;
+  const v=$('#cam'); if(!v) return;
+  try{
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) throw Object.assign(new Error('nocam'),{name:'NoCam'});
+    try{ scan.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false}); }
+    catch(e1){ if(e1&&e1.name==='NotAllowedError') throw e1; scan.stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false}); }
+    v.srcObject=scan.stream; v.muted=true; v.setAttribute('playsinline','');
+    await v.play();
+    try{ const tr=scan.stream.getVideoTracks()[0]; const caps=tr.getCapabilities?tr.getCapabilities():{}; if(caps.focusMode&&caps.focusMode.includes('continuous')) await tr.applyConstraints({advanced:[{focusMode:'continuous'}]}); }catch(e){}
+    scan.active=true; $('#camOff').hidden=true; $('#frame').hidden=false;
+    setCamStatus('Câmera ativa · '+(scan.bd?'leitor nativo':'leitor padrão')+' · aponte para o QR a 15–25 cm'); tick();
+  }catch(e){
+    const n=e&&e.name, msg=n==='NotAllowedError'?'A câmera está bloqueada. Toque no cadeado ao lado do endereço do site, permita a câmera e depois em "Tentar de novo".':
+      n==='NotFoundError'?'Nenhuma câmera encontrada neste aparelho.':'A câmera ao vivo não abriu. Use "Tirar foto do QR" ou "Escolher imagem", ou digite o código abaixo.';
+    stopCam(true);
+    $('#camOff').innerHTML='<div><p style="margin:0 0 12px">'+esc(msg)+'</p><button class="btn pop sm" data-act="cam">Tentar de novo</button></div>';
+    $('#camOff').hidden=false;
+  }
+}
+function setCamStatus(t){ const e=$('#camst'); if(e) e.textContent=t||''; }
+function stopCam(keepMsg){
+  scan.active=false; setCamStatus('');
+  if(scan.stream){ scan.stream.getTracks().forEach(t=>t.stop()); scan.stream=null; }
+  const v=$('#cam'); if(v) v.srcObject=null;
+  const off=$('#camOff'); if(off&&!keepMsg){ off.hidden=false; off.innerHTML=camIdle(); }
+  const f=$('#frame'); if(f) f.hidden=true;
+}
+function jsqrFrom(src,w,h,max,both){
+  if(typeof jsQR==='undefined') return null;
+  const sc=Math.min(1,max/Math.max(w,h)), cw=Math.max(1,Math.round(w*sc)), ch=Math.max(1,Math.round(h*sc));
+  scan.cv.width=cw; scan.cv.height=ch;
+  const c=scan.cv.getContext('2d',{willReadFrequently:true}); c.drawImage(src,0,0,cw,ch);
+  const r=jsQR(c.getImageData(0,0,cw,ch).data,cw,ch,{inversionAttempts:both?'attemptBoth':'dontInvert'});
+  return r&&r.data?r.data:null;
+}
+function jsqrCrop(src,sx,sy,sw,sh,max,both){
+  if(typeof jsQR==='undefined') return null;
+  const sc=Math.min(1,max/Math.max(sw,sh)), cw=Math.max(1,Math.round(sw*sc)), ch=Math.max(1,Math.round(sh*sc));
+  scan.cv.width=cw; scan.cv.height=ch;
+  const c=scan.cv.getContext('2d',{willReadFrequently:true}); c.drawImage(src,sx,sy,sw,sh,0,0,cw,ch);
+  const r=jsQR(c.getImageData(0,0,cw,ch).data,cw,ch,{inversionAttempts:both?'attemptBoth':'dontInvert'});
+  return r&&r.data?r.data:null;
+}
+let tickN=0;
+async function tick(){
+  if(!scan.active) return;
+  const v=$('#cam');
+  if(v&&v.readyState>=2&&v.videoWidth&&!scan.busy){
+    scan.busy=true; tickN++;
+    try{
+      let txt=null;
+      if(scan.bd){ try{ const r=await Promise.race([scan.bd.detect(v),sleep(400).then(()=>null)]); if(r&&r.length) txt=r[0].rawValue; }catch(e){} }
+      if(!txt){
+        const w=v.videoWidth,h=v.videoHeight, side=Math.round(Math.min(w,h)*0.75), sx=Math.round((w-side)/2), sy=Math.round((h-side)/2);
+        txt=jsqrCrop(v,sx,sy,side,side,720,tickN%2===0);
+        if(!txt) txt=jsqrFrom(v,w,h,960,tickN%3===0);
+      }
+      const hasJs=typeof jsQR!=='undefined';
+      if(!scan.bd&&!hasJs) setCamStatus('O leitor de QR não carregou. Recarregue a página (Ctrl+F5) ou use "Escolher imagem".');
+      else if(tickN%8===0) setCamStatus('Lendo… '+v.videoWidth+'×'+v.videoHeight+' · leitor:'+(scan.bd?' nativo':'')+(hasJs?' jsQR':'')+' · quadros '+tickN);
+      if(txt){ setCamStatus('QR detectado'); handleScan(txt,false); }
+    }finally{ scan.busy=false; }
+  }
+  setTimeout(tick,90);
+}
+async function decodeImage(img){
+  if(scan.bd){ try{ const r=await scan.bd.detect(img); if(r&&r.length) return r[0].rawValue; }catch(e){} }
+  for(const m of [1600,1100,720,480]){ const t=jsqrFrom(img,img.naturalWidth||img.width,img.naturalHeight||img.height,m,true); if(t) return t; }
+  return null;
+}
+function onPhoto(e){
+  const f=e.target.files&&e.target.files[0]; if(!f) return;
+  const img=new Image(), url=URL.createObjectURL(f);
+  img.onload=async()=>{
+    const t=await decodeImage(img); URL.revokeObjectURL(url);
+    if(t) handleScan(t,true); else toast('Não achei QR code na imagem. Use uma imagem nítida, com o QR inteiro visível.');
+  };
+  img.onerror=()=>{ URL.revokeObjectURL(url); toast('Não foi possível abrir a imagem'); };
+  img.src=url;
+}
+let actx;
+function beep(kind){
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    const seq=kind==='ok'?[[880,.12]]:[[220,.18],[180,.22]]; let t=actx.currentTime;
+    seq.forEach(([f,d])=>{ const o=actx.createOscillator(),g=actx.createGain(); o.frequency.value=f; o.type='square'; g.gain.value=.08; o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t+d); t+=d+.05; });
+  }catch(e){}
+  try{ navigator.vibrate&&navigator.vibrate(kind==='ok'?80:[120,60,120]); }catch(e){}
+}
+async function handleScan(raw,manual){
+  const now=Date.now();
+  if(!manual){ if(raw===scan.last&&now<scan.until) return; scan.last=raw; scan.until=now+4000; }
+  const code=extractCode(raw); let res;
+  if(!code){ res={status:'invalid',msg:'Li "'+String(raw).slice(0,50)+'", que não é um ingresso desta festa.'}; }
+  else{
+    if(scan.inflight.has(code)) return;
+    scan.inflight.add(code);
+    try{ res=await state.api.validate(code,state.session.user,state.eventId); } finally{ scan.inflight.delete(code); }
+    if(res.status==='ok'&&!manual) scan.until=Date.now()+8000;
+  }
+  showResult(res,code);
+}
+function showResult(res,code){
+  const t=res.ticket, el=$('#result');
+  const map={
+    ok:['ENTRADA LIBERADA',t&&t.name,(t&&t.kind||'')],
+    used:['JÁ VALIDADO',t&&t.name,'Este QR code já foi usado em '+(t&&t.usedAt?fmt(t.usedAt):'—')],
+    wrongevent:['OUTRO EVENTO',t&&t.name,'Este ingresso é de: '+evById(evOf(t||{})).name+'. Não vale para '+curEvent().name+'.'],
+    invalid:['QR INVÁLIDO','',res.msg||'Código não encontrado na lista.'],
+    busy:['AGUARDE','','Outro aparelho está validando este código. Leia de novo em instantes.'],
+    error:['ERRO','',res.msg||'Tente novamente.']
+  };
+  const m=map[res.status]||map.error;
+  el.className='result '+res.status;
+  el.innerHTML='<p class="big">'+m[0]+'</p>'+(m[1]?'<p class="nm">'+esc(m[1])+'</p>':'')+'<p class="sub">'+esc(m[2])+'</p>';
+  beep(res.status==='ok'?'ok':'bad');
+  state.log.unshift({at:new Date().toISOString(),status:res.status,name:(t&&t.name)||code||'—'});
+  state.log=state.log.slice(0,8);
+  const lab={ok:'Liberado',used:'Já usado',invalid:'Inválido',wrongevent:'Outro evento',busy:'Aguarde',error:'Erro'};
+  $('#log').innerHTML=state.log.map(l=>'<div><span class="t">'+esc(hm(l.at))+'</span><span>'+esc(l.name)+'</span><span class="s '+l.status+'">'+lab[l.status]+'</span></div>').join('');
+}
+
+/* ---------- cliques ---------- */
+document.addEventListener('click',async e=>{
+  const el=e.target.closest('[data-act],[data-tab],[data-code],[data-filter]'); if(!el) return;
+  if(el.dataset.tab){ setTab(el.dataset.tab); return; }
+  if(el.dataset.filter){ state.filter=el.dataset.filter; renderList(); return; }
+  const act=el.dataset.act;
+  if(!act&&el.dataset.code){ showTicket(el.dataset.code); return; }
+  if(act==='close') closeModal();
+  else if(act==='back') showTicket(state.current);
+  else if(act==='cam') startCam();
+  else if(act==='photo'){ const p=$('#photo'); if(p){ p.value=''; p.click(); } }
+  else if(act==='gallery'){ const p=$('#gallery'); if(p){ p.value=''; p.click(); } }
+  else if(act==='pdf') downloadPDF();
+  else if(act==='share') sharePDF();
+  else if(act==='edit') showEdit(state.current);
+  else if(act==='export') exportExcel(false);
+  else if(act==='conta') showConta();
+  else if(act==='senha') showSenha();
+  else if(act==='eventos') showEventos();
+  else if(act==='newev') showEventForm(null);
+  else if(act==='editev') showEventForm(el.dataset.ev);
+  else if(act==='selev') selectEvent(el.dataset.ev);
+  else if(act==='exportall') exportExcel(true);
+  else if(act==='delev'){
+    if(el.dataset.armed!=='1'){ el.dataset.armed='1'; el.textContent='Toque de novo: apaga TODOS os ingressos deste evento'; return; }
+    deleteEvent(el.dataset.ev);
+  }
+  else if(act==='sair') logout();
+  else if(act==='copy'){ try{ await navigator.clipboard.writeText(state.current); toast('Código copiado'); }catch(x){ toast(state.current); } }
+  else if(act==='del'){
+    if(!state.session.isSuper){ toast('Somente o administrador a3pa pode excluir ingressos'); return; }
+    if(el.dataset.armed!=='1'){ el.dataset.armed='1'; el.textContent='Toque de novo para confirmar'; return; }
+    try{ await state.api.removeTicket(state.current); delete state.local[state.current]; closeModal(); toast('Ingresso excluído'); }catch(x){ toast('Sem permissão para excluir'); }
+  }
+  else if(act==='resetadm'||act==='deladm'){
+    if(!state.session.isSuper) return;
+    const u=el.dataset.user;
+    if(el.dataset.armed!=='1'){ el.dataset.armed='1'; el.textContent='Confirmar?'; setTimeout(()=>{ if(el.isConnected){ el.dataset.armed='0'; el.textContent=act==='deladm'?'Excluir':'Redefinir'; } },3500); return; }
+    if(state.api.deleteAdmin){
+      const r=act==='deladm'?await state.api.deleteAdmin(u):await state.api.resetAdmin(u);
+      toast(r&&r.error?r.error:(act==='deladm'?'Acesso de '+u+' removido':'Senha de '+u+' voltou para '+DEFAULT_PW));
+      return;
+    }
+    try{
+      if(act==='deladm'){ await state.api.delUser(u); toast('Acesso de '+u+' removido'); }
+      else{
+        const d=await state.api.getUser(u); if(!d) return;
+        const salt=rnd(10);
+        await state.api.putUser(u,Object.assign({},d,{salt,hash:await sha(salt+':'+DEFAULT_PW),mustChange:true}));
+        toast('Senha de '+u+' voltou para '+DEFAULT_PW);
+      }
+    }catch(x){ toast('Não foi possível concluir'); }
+  }
+});
+$('#modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#modal').hidden) closeModal(); });
+
+/* ---------- inicialização ---------- */
+let started=false;
+function startApp(){
+  if(started) return; started=true;
+  buildShell();
+  state.api.onEvents((list,cache)=>{ state.events=list; if(!cache) state.evOk=true; ensureEvent(); renderHead(); renderList(); maybeMigrate(); });
+  state.api.onTickets((list,cache)=>{ state.tickets=list; if(!cache) state.tkOk=true; renderList(); maybeMigrate(); });
+  state.api.onUsers(list=>{
+    state.users=list;
+    const names=new Set(list.map(u=>u.username));
+    if(!state.session.isSuper&&state.usersSeen.has(state.session.user)&&!names.has(state.session.user)){ toast('Seu acesso foi removido'); setTimeout(logout,1200); }
+    names.forEach(n=>state.usersSeen.add(n));
+    renderAdmin();
+  });
+}
+(async function init(){
+  showLoading();
+  let db=null,user=null;
+  try{
+    if(window.claude&&typeof window.claude.use==='function'){
+      const r=await Promise.all([window.claude.use('db'),window.claude.use('user'),window.claude.use('downloads')]);
+      db=r[0]; user=r[1]; state.downloads=r[2];
+    }
+  }catch(e){ db=null; }
+  if(db){
+    let w=null; try{ w=user?user.can('data.write'):null; }catch(e){}
+    if(w===false){ showRestricted(); return; }
+    state.mode='cloud'; state.api=makeCloud(db);
+  }else if(FB_OK&&!window.firebase){
+    gateScreen(logo+'<h1 class="org">Não foi possível carregar</h1><p>O serviço de dados (Firebase) não abriu. Confira a internet, desative bloqueadores de anúncio para este site e recarregue a página.</p><button class="btn" onclick="location.reload()">Recarregar</button>');
+    return;
+  }else if(FB_OK&&window.firebase){
+    state.mode='firebase'; state.api=makeFirebase(FIREBASE_CONFIG);
+    try{ state.session=await state.api.restore(); }catch(e){}
+    if(state.session) startApp(); else showLogin();
+    return;
+  }else{ state.mode='demo'; state.api=makeDemo(); }
+  let saved=null; try{ saved=sessionStorage.getItem('atl-session'); }catch(e){}
+  if(saved){
+    try{
+      if(saved===SUPER_USER){ state.session={user:SUPER_USER,isSuper:true,mustChange:false,name:'Super admin'}; }
+      else{ const d=await state.api.getUser(saved); if(d) state.session={user:saved,isSuper:false,mustChange:!!d.mustChange,name:d.displayName||saved}; }
+    }catch(e){}
+  }
+  if(state.session) startApp(); else showLogin();
+})();
+})();
+</script>
+</body>
+</html>
